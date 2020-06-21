@@ -1,0 +1,16 @@
+doctype html
+html 
+    head
+        //- <script src="https://kit.fontawesome.com/9a43876551.js" crossorigin="anonymous"></script> HTML방식도 PUG 사용가능. 
+        //- 아래는 PUG 방식. 
+        script(src="https://kit.fontawesome.com/9a43876551.js" , crossorigin="anonymous")
+        title #{pageTitle} | #{siteName}
+    body
+        include ../partials/header   
+        //- header 
+        //-     h1 WeTube 
+        main   
+            block content 
+        include ../partials/footer 
+        //- footer
+        //-     span &copy; Wetube
