@@ -21,4 +21,4 @@ Cloning Youtube with Vanilla and NodeJS
 ## 정리중
 ------------------------------
 
-init.js > app.js > router > controller > pug 
+init.js > app.js > router > controller > (home)pug > (videoBlock) pug

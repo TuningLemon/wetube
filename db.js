@@ -5,7 +5,7 @@ export const videos = [
         description: 'this is about magic',
         views:24,
         videoFile:"https://www.youtube.com/watch?v=XeUBb6GKHNg",
-        creator: {
+        creator:{    
             name:'Ravenclaw',
             email:"Ravenclaw@gmail.com"
         }

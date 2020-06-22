@@ -1,0 +1,11 @@
+//- mixin 각각 다른 정보를 가지지만 
+//- 같은 구조를 가지는 데이터를 표시하기 위한 코드를 
+//- 캡슐화함. 
+
+mixin videoBlock(video={})
+    //- h1=video.title
+    //- p=video.description
+    .videosBlock
+        video.videoBlock__thumbnail(src=video.videoFile, controls=true, autoplay=true)
+        h4.videoBlock__title=video.title
+        h6.videoBlock__views=video.views
