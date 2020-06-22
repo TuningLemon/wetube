@@ -17,3 +17,8 @@ Cloning Youtube with Vanilla and NodeJS
 - []Video Detail
 - []Edit Video
 
+
+## 정리중
+------------------------------
+
+init.js > app.js > router > controller > pug 
