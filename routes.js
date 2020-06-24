@@ -29,7 +29,7 @@ const routes = {
         if(id) {
             return `/users/${id}`;
         } else {
-            USER_DETAIL
+            return USER_DETAIL;
         }
 
     },

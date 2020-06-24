@@ -11,7 +11,7 @@ import {
 const userRouter = express.Router();
 userRouter.get(routes.editProfile, editProfile);
 userRouter.get(routes.changePassword, changePassword);
-userRouter.get(routes.userDetail, userDetail);
+userRouter.get(routes.userDetail(), userDetail);
 
 // 함수들을 controller에 분리하는 작업. 
 // userRouter.get(routes.users, (req,res) => res.send('Users'));
