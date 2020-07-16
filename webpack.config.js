@@ -11,10 +11,12 @@ const ENTRY_FILE = path.resolve(__dirname, "assets", "js", "main.js");
 const OUTPUT_DIR = path.join(__dirname, "static");
 
 const config = {
-  entry: ENTRY_FILE,
+  entry: ["@babel/polyfill", ENTRY_FILE],
+  // entry: ["@babel/polyfill", ENTRY_FILE],
   mode: MODE,
   module: {
     rules: [
+      // module을 발견하면 rule을 따르라
       {
         test: /\.(js)$/,
         use: [
@@ -29,7 +31,6 @@ const config = {
         test: /\.css$/i,
         use: [MiniCssExtractPlugin.loader, "css-loader"],
       },
-      // module을 발견하면 rule을 따르라
       {
         // sass
         // test: /\.(scss)$/i,

@@ -25,6 +25,8 @@ videoRouter.get(routes.videoDetail(), videoDetail);
 // Edit Video
 videoRouter.get(routes.editVideo(), onlyPrivate, getEditVideo);
 videoRouter.post(routes.editVideo(), onlyPrivate, postEditVideo);
+
+// Delete Video
 videoRouter.get(routes.deleteVideo(), onlyPrivate, deleteVideo);
 
 // videoRouter.get(routes.videos, (req,res) => res.send('Videos'));

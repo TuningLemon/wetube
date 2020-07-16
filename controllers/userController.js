@@ -3,11 +3,14 @@
 /* eslint-disable linebreak-style */
 // export const home = (req,res) => res.render("Home");
 // res.send >> res.render로 수정.
+import dotenv from "dotenv";
 import passport from "passport";
 import routes from "../routes";
 import User from "../models/User";
 import { json } from "body-parser";
 // import { RSA_NO_PADDING } from "constants";
+
+dotenv.config();
 
 export const getJoin = (req, res) => {
   res.render("join", { pageTitle: "Join" });
@@ -106,9 +109,19 @@ export const postFacebookLogin = (req, res) => {
   res.redirect(routes.home);
 };
 
-export const getMe = (req, res) => {
-  res.render("userDetail", { pageTitle: "User Detail", user: req.user });
-  console.log(req.user, "hello getMe");
+export const getMe = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).populate("videos");
+    console.log(user);
+    res.render("userDetail", {
+      pageTitle: "user Detail ",
+      user,
+      avatarDefault: process.env.AVATAR_DEFAULT,
+    });
+  } catch (error) {
+    res.redirect(routes.home);
+  }
+  // res.render("userDetail", { pageTitle: "User Detail", user: req.user });
 };
 
 export const logout = (req, res) => {
@@ -126,8 +139,7 @@ export const userDetail = async (req, res) => {
     params: { id }, // 여기서 id는 routes id.
   } = req;
   try {
-    const user = await User.findById(id);
-    console.log(user, "hello userDetail");
+    const user = await User.findById(id).populate("videos");
     res.render("userDetail", { pageTitle: "user Detail ", user });
   } catch (error) {
     res.redirect(routes.home);
@@ -140,13 +152,17 @@ export const getEditProfile = (req, res) =>
 export const postEditProfile = async (req, res) => {
   const {
     body: { name, email },
-    file,
+    file: { location },
   } = req;
+
+  console.log(req.file);
   try {
     await User.findByIdAndUpdate(req.user.id, {
       name,
       email,
-      avatarUrl: file ? file.path : req.user.avatarUrl,
+      // avatarUrl: file ? file.path : req.user.avatarUrl,  > AmazonS3로 이동하면서 삭제.
+      // avatarUrl: file ? file.location : req.user.avatarUrl,
+      avatarUrl: location,
     });
     res.redirect(routes.me);
   } catch (error) {

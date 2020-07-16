@@ -7,6 +7,7 @@
 
 import routes from "../routes";
 import Video from "../models/Video";
+import Comment from "../models/Comment";
 
 export const home = async (req, res) => {
   try {
@@ -47,11 +48,14 @@ export const postUpload = async (req, res) => {
   const {
     // body, file
     body: { title, description },
-    file: { path },
+    // file: { path },
+    file: { location },
   } = req;
 
+  console.log(req.file); // Amazon에서 받은 FILE 정보의 Json파일 확인 가능.
+
   const newVideo = await Video.create({
-    fileUrl: path,
+    fileUrl: location,
     title,
     description,
     creator: req.user.id,
@@ -72,25 +76,28 @@ export const videoDetail = async (req, res) => {
     params: { id }, // 여기서 id는 routes id.
   } = req;
   try {
-    const video = await Video.findById(id).populate("creator");
+    const video = await Video.findById(id)
+      .populate("creator")
+      .populate("comments");
     res.render("videoDetail", { pageTitle: video.title, video });
   } catch (error) {
     console.log("error videoDetail");
     res.redirect(routes.home);
   }
 };
+
 export const getEditVideo = async (req, res) => {
   const {
-    params: { id }, // 여기서 id는 routes id.
+    params: { id }, // video.id (videoDetail의 editbutton)
   } = req;
-
   try {
     const video = await Video.findById(id);
-    // console.log(video);
-    res.render("editVideo", { pageTitle: `Edit ${video.title}`, video });
-    console.log(video.title);
+    if (video.creator != req.user.id) {
+      throw Error();
+    } else {
+      res.render("editVideo", { pageTitle: `Edit ${video.title}`, video });
+    }
   } catch (error) {
-    console.log("error getEditVideo");
     res.redirect(routes.home);
   }
 };
@@ -119,9 +126,83 @@ export const deleteVideo = async (req, res) => {
     params: { id },
   } = req;
   try {
-    await Video.findOneAndRemove({ _id: id });
+    const video = await Video.findById(id);
+    if (video.creator != req.user.id) {
+      throw Error();
+    } else {
+      await Video.findOneAndRemove({ _id: id });
+    }
   } catch (error) {
     console.log("deleteVideo Err");
   }
   res.redirect(routes.home);
+};
+
+//Register Video View
+export const postRegisterView = async (req, res) => {
+  const {
+    params: { id },
+  } = req;
+
+  try {
+    const video = await Video.findById(id);
+    video.views += 1;
+    video.save();
+    res.status(200);
+  } catch (err) {
+    res.status(400);
+  } finally {
+    res.end();
+  }
+};
+//Add Comment
+export const postAddComment = async (req, res) => {
+  const {
+    params: { id },
+    body: { comment },
+    user,
+  } = req;
+
+  try {
+    const video = await Video.findById(id);
+    const newComment = await Comment.create({
+      text: comment,
+      creator: user.id,
+    });
+    video.comments.push(newComment.id);
+    video.save();
+    res.send(newComment.id);
+  } catch (err) {
+    res.status(400);
+  } finally {
+    res.end();
+  }
+};
+
+// Delete Comments
+export const postDeleteComment = async (req, res) => {
+  const {
+    params: { id },
+  } = req;
+
+  try {
+    const comment = await Comment.findById(id).populate("creator");
+    console.log(
+      typeof req.user.id,
+      req.user.id,
+      typeof comment.creator.id,
+      comment.creator.id
+    );
+
+    if (comment.creator.id !== req.user.id) {
+      throw Error();
+    } else {
+      await Comment.findOneAndRemove({ _id: id });
+    }
+  } catch (error) {
+    console.log("deleteComment Err : User is not this comment owner");
+    res.status(403);
+  } finally {
+    res.end();
+  }
 };

@@ -7,7 +7,9 @@ mixin videoBlock(video={})
     //- p=video.description
     .videoBlock
         a(href=routes.videoDetail(video.id))
-            video.videoBlock__thumbnail(src=video.videoFile, controls=true, autoplay=false)
+            //- amazon으로 서버 옮기면서 삭제 
+            //- video.videoBlock__thumbnail(src=`/${video.videoFile}`, controls=true, autoplay=false)
+            video.videoBlock__thumbnail(src=video.videoFile, controls=true, autoplay=false) 
             h4.videoBlock__title=video.title
             if video.views === 1
                 h6.videoBlock__views 1 view

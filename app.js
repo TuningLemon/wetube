@@ -1,5 +1,4 @@
-//const express = require('express')
-import dotenv from "dotenv";
+// const express = require('express')
 import express from "express";
 import morgan from "morgan"; // morgan은 로그. 미들웨어.
 import helmet from "helmet"; // node.js 앱 보안에 필요 미들웨어
@@ -10,14 +9,14 @@ import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import { localsMiddleware } from "./middlewares";
-import globalRouter from "./routers/globalRouter";
 import routes from "./routes";
+import globalRouter from "./routers/globalRouter";
 import userRouter from "./routers/userRouter";
 import videoRouter from "./routers/videoRouter";
+import apiRouter from "./routers/apiRouter";
 
 import "./passport";
 
-dotenv.config();
 const app = express();
 const CookieStore = MongoStore(session);
 // console.log(process.env.COOKIE_SECRET);
@@ -89,6 +88,7 @@ app.use(localsMiddleware);
 app.use(routes.home, globalRouter);
 app.use(routes.users, userRouter);
 app.use(routes.videos, videoRouter);
+app.use(routes.api, apiRouter);
 // app.use("/users", userRouter);//누군가 user에 접속하면, userRouter를 다 사용하겠다는 뜻.
 // app.use("/videos", videoRouter);
 
