@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 // import { resolve, join } from "path";
 const path = require("path"); // 이 파일은 모던 js 파일이 아니라서, import를 쓸 수가 없음.
-// __dirname : 현재 프로젝트 디렉토리 이름
+// __dirname : 현재 이 파일이 있는 디렉토리 이름
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const ExtractCSS = require("extract-text-webpack-plugin");
 const autoprefixer = require("autoprefixer");

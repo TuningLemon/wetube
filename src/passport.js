@@ -1,4 +1,3 @@
-import dotenv from "dotenv";
 import passport from "passport";
 import GithubStrategy from "passport-github";
 import FacebookStrategy from "passport-facebook";
@@ -10,9 +9,6 @@ import {
 import routes from "./routes";
 
 passport.use(User.createStrategy());
-
-dotenv.config();
-
 passport.use(
   new GithubStrategy(
     {
@@ -23,7 +19,6 @@ passport.use(
     githubLoginCallback
   )
 );
-
 passport.use(
   new FacebookStrategy(
     {
